@@ -9,7 +9,7 @@ interface WeatherData {
   // me: to check what exactly is needed
   name: string;
   main: {
-    temp: number;
+    temp: number | null;
     humidity: number;
   };
   wind: {
@@ -23,7 +23,7 @@ const WeatherApp = () => {
   const [data, setData] = useState<WeatherData>({
     name: '',
     main: {
-      temp: 0,
+      temp: null,
       humidity: 0,
     },
     wind: {
@@ -73,7 +73,9 @@ const WeatherApp = () => {
         <div className='weather'>
           <img src={sunny} alt='sunny' />
           <div className='weather-type'>Clear</div>
-          <div className='temp'>28°</div>
+          <div className='temp'>
+            {data.main.temp ? `${Math.floor(data.main.temp)}°` : null}
+          </div>
         </div>
         <div className='weather-date'>
           <p>Fri, 3 May</p>
