@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import sunny from '../assets/images/sunny.png';
 import cloudy from '../assets/images/cloudy.png';
 import rainy from '../assets/images/rainy.png';
@@ -7,7 +7,9 @@ import snowy from '../assets/images/snowy.png';
 // me - because I use TS:
 interface WeatherData {
   // me: to check what exactly is needed
-  name: string;
+  weather: {
+    main: string;
+  }[];
   main: {
     temp: number | null;
     humidity: number;
@@ -15,13 +17,14 @@ interface WeatherData {
   wind: {
     speed: number;
   };
+  name: string;
 }
 
 const WeatherApp = () => {
   // const [data, setData] = useState({});
   // me - because I use TS:
   const [data, setData] = useState<WeatherData>({
-    name: '',
+    weather: [{ main: '' }],
     main: {
       temp: null,
       humidity: 0,
@@ -29,10 +32,23 @@ const WeatherApp = () => {
     wind: {
       speed: 0,
     },
+    name: '',
   });
 
   const [location, setLocation] = useState('');
   const api_key = '339898cf98c9635ca9c89a112b73f12d';
+
+  useEffect(() => {
+    const fetchDefaultWeather = async () => {
+      const defaultLocation = 'Belgrade';
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${defaultLocation}&units=Metric&appid=${api_key}`;
+      const res = await fetch(url);
+      const defaultData = await res.json();
+      setData(defaultData);
+    };
+
+    fetchDefaultWeather();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocation(e.target.value);
@@ -43,12 +59,14 @@ const WeatherApp = () => {
   };
 
   const search = async () => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=Metric&appid=${api_key}`;
-    const res = await fetch(url);
-    const searchData = await res.json();
-    console.log(searchData);
-    setData(searchData);
-    setLocation('');
+    if (location.trim() !== '') {
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=Metric&appid=${api_key}`;
+      const res = await fetch(url);
+      const searchData = await res.json();
+      console.log(searchData);
+      setData(searchData);
+      setLocation('');
+    }
   };
 
   return (
@@ -72,7 +90,9 @@ const WeatherApp = () => {
         </div>
         <div className='weather'>
           <img src={sunny} alt='sunny' />
-          <div className='weather-type'>Clear</div>
+          <div className='weather-type'>
+            {data.weather ? data.weather[0].main : null}
+          </div>
           <div className='temp'>
             {data.main.temp ? `${Math.floor(data.main.temp)}°` : null}
           </div>
@@ -84,12 +104,14 @@ const WeatherApp = () => {
           <div className='humidity'>
             <div className='data-name'>Humidity</div>
             <i className='fa-solid fa-droplet'></i>
-            <div className='data'>35%</div>
+            <div className='data'>{data.main ? data.main.humidity : null}%</div>
           </div>
           <div className='wind'>
             <div className='data-name'>Wind</div>
             <i className='fa-solid fa-wind'></i>
-            <div className='data'>3 km/h</div>
+            <div className='data'>
+              {data.wind ? data.wind.speed : null} km/h
+            </div>
           </div>
         </div>
       </div>
