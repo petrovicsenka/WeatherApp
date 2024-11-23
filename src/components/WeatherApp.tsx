@@ -36,6 +36,7 @@ const WeatherApp = () => {
   });
 
   const [location, setLocation] = useState('');
+  const [error, setError] = useState<string>('');
   const api_key = '339898cf98c9635ca9c89a112b73f12d';
 
   useEffect(() => {
@@ -61,10 +62,31 @@ const WeatherApp = () => {
   const search = async () => {
     if (location.trim() !== '') {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=Metric&appid=${api_key}`;
-      const res = await fetch(url);
-      const searchData = await res.json();
-      setData(searchData);
-      setLocation('');
+
+      try {
+        const res = await fetch(url);
+
+        if (!res.ok) {
+          throw new Error('City not found!');
+        }
+
+        const searchData = await res.json();
+        setData(searchData);
+
+        setLocation('');
+        setError('');
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+
+          setTimeout(() => {
+            setLocation('');
+            setError('');
+          }, 3000);
+        } else {
+          setError('An unknown error occurred');
+        }
+      }
     }
   };
 
@@ -100,6 +122,7 @@ const WeatherApp = () => {
             <i className='fa-solid fa-magnifying-glass' onClick={search}></i>
           </div>
         </div>
+        {error && <div className='error-message'>{error}</div>}
         <div className='weather'>
           <img src={weatherImage} alt='sunny' />
           <div className='weather-type'>
