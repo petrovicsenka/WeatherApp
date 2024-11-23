@@ -63,11 +63,23 @@ const WeatherApp = () => {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=Metric&appid=${api_key}`;
       const res = await fetch(url);
       const searchData = await res.json();
-      console.log(searchData);
       setData(searchData);
       setLocation('');
     }
   };
+
+  const weatherImages = {
+    Clear: sunny,
+    Clouds: cloudy,
+    Rain: rainy,
+    Snow: snowy,
+    Haze: cloudy,
+    Mist: cloudy,
+  };
+
+  const weatherImage = data.weather
+    ? weatherImages[data.weather[0].main as keyof typeof weatherImages]
+    : null;
 
   return (
     <div className='container'>
@@ -89,7 +101,7 @@ const WeatherApp = () => {
           </div>
         </div>
         <div className='weather'>
-          <img src={sunny} alt='sunny' />
+          <img src={weatherImage} alt='sunny' />
           <div className='weather-type'>
             {data.weather ? data.weather[0].main : null}
           </div>
