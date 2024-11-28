@@ -5,9 +5,7 @@ import rainy from '../assets/images/rainy.png';
 import snowy from '../assets/images/snowy.png';
 import loadingGif from '../assets/images/loading.gif';
 
-// me - because I use TS:
 interface WeatherData {
-  // me: to check what exactly is needed
   weather: {
     main: string;
   }[];
@@ -23,8 +21,6 @@ interface WeatherData {
 }
 
 const WeatherApp = () => {
-  // const [data, setData] = useState({});
-  // me - because I use TS:
   const [data, setData] = useState<WeatherData>({
     weather: [{ main: '' }],
     main: {
@@ -40,7 +36,6 @@ const WeatherApp = () => {
 
   const [location, setLocation] = useState('');
   const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState<string>('');
   const api_key = '339898cf98c9635ca9c89a112b73f12d';
 
   useEffect(() => {
@@ -82,41 +77,7 @@ const WeatherApp = () => {
         setData(searchData);
         setLocation('');
       }
-
       setLoading(false);
-
-      // try {
-      //   const res = await fetch(url);
-
-      //   if (!res.ok) {
-      //     throw new Error('City not found!');
-      //   }
-
-      //   const searchData = await res.json();
-      //   if (searchData.cod !== 200) {
-      //     setData((prevState) => ({
-      //       ...prevState,
-      //       notFound: true,
-      //     }));
-      //   } else {
-      //     setData(searchData);
-      //     setLocation('');
-      //     setError('');
-      //   }
-
-      //   //obrisi svoju obradu greske!
-      // } catch (error) {
-      //   if (error instanceof Error) {
-      //     setError(error.message);
-
-      //     setTimeout(() => {
-      //       setLocation('');
-      //       setError('');
-      //     }, 3000);
-      //   } else {
-      //     setError('An unknown error occurred');
-      //   }
-      // }
     }
   };
 
@@ -231,7 +192,6 @@ const WeatherApp = () => {
             </div>
           </>
         )}
-        {/* {error && <div className='error-message'>{error}</div>} */}
       </div>
     </div>
   );
