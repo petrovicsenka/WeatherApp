@@ -174,3 +174,37 @@ $gradient-text: linear-gradient(to right, $text-color-dark, $color-lighter);
     color: $text-color-dark;
   }
 }
+
+$background-gradients: (
+  clear: linear-gradient(to right, #f3b07c, #fcd283),
+  clouds: linear-gradient(to right, #57d6d4, #71eeec),
+  rain: linear-gradient(to right, #5bc8fb, #80eaff),
+  snow: linear-gradient(to right, #aff2ff, #fff),
+  haze: linear-gradient(to right, #57d6d4, #71eeec),
+  mist: linear-gradient(to right, #57d6d4, #71eeec),
+);
+
+@mixin background-gradient($type) {
+  background-image: map-get($background-gradients, $type);
+}
+
+.background-clear {
+  @include background-gradient(clear);
+}
+
+.background-clouds {
+  @include background-gradient(clouds);
+}
+
+.background-rain {
+  @include background-gradient(rain);
+}
+
+.background-snow {
+  @include background-gradient(snow);
+}
+
+.background-haze,
+.background-mist {
+  @include background-gradient(haze);
+}

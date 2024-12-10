@@ -131,8 +131,12 @@ const WeatherApp = () => {
   const dayOfMonth = currentDate.getDate();
   const formattedDate = `${dayOfWeek}, ${dayOfMonth} ${month}`;
 
+  const backgroundClass = data.weather
+    ? `background-${data.weather[0].main.toLowerCase()}`
+    : '';
+
   return (
-    <div className='container' style={{ backgroundImage }}>
+    <div className={`container ${backgroundClass}`}>
       <div
         className='weather-app'
         style={{
