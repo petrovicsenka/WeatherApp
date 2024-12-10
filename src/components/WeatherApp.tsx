@@ -34,8 +34,8 @@ const WeatherApp = () => {
     notFound: false,
   });
 
-  const [location, setLocation] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const api_key = '339898cf98c9635ca9c89a112b73f12d';
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const WeatherApp = () => {
   };
 
   const search = async () => {
-    if (location.trim() !== '') {
+    if (location && location.trim() !== '') {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=Metric&appid=${api_key}`;
 
       const res = await fetch(url);
@@ -149,7 +149,7 @@ const WeatherApp = () => {
             <input
               type='text'
               placeholder='Enter Location'
-              value={location}
+              value={location || ''}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
             />
